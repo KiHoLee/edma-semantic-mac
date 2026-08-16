@@ -1,6 +1,7 @@
 """Canonical replot of fig_bertvit_merged.pdf from data/bertvit_merged.csv.
 Curves: EDMA, EDMA + refinement (hybrid), ToDMA-adapted, OMA, genie bound.
-The attention columns remain in the CSV but are not plotted."""
+The capacity-check column edma_ref2 remains in the CSV but is not
+plotted (it tracks edma_ref; quoted in the text only)."""
 import csv
 from pathlib import Path
 import matplotlib
@@ -24,7 +25,7 @@ snr = [float(r["snr_db"]) for r in rows]
 col = lambda k: [float(r[k]) for r in rows]
 
 fig, ax = plt.subplots()
-ax.plot(snr, col("edma"), "o-", color="C3", label="EDMA (closed form)")
+ax.plot(snr, col("edma"), "o-", color="C3", label="EDMA")
 ax.plot(snr, col("edma_ref"), "^-", color="C2",
         label="EDMA + refinement stage")
 ax.plot(snr, col("todma"), "d-.", color="C4", label="ToDMA-adapted")
