@@ -127,7 +127,14 @@ def train_refiners(epochs=220, steps=20, batch=48, lr=5e-4,
             print(f"  epoch {ep+1}: loss {float(loss.detach()):.4f} "
                   f"(cos {float(cs.detach()):.3f})", flush=True)
     print(f"  trained in {time.time()-t0:.0f}s")
-    return P_single, [p.detach() for p in params]
+    P4 = [p.detach() for p in params]
+    rel = float((P_single - sum(P4) / 4).norm() / P_single.norm())
+    print(f"  [diag] ||P1 - mean(P4)|| / ||P1|| = {rel:.3e}")
+    np.savez(DATA / "refine_gates.npz",
+             P1=P_single.cpu().numpy(),
+             **{f"P4_{i}": p.cpu().numpy() for i, p in enumerate(P4)})
+    print("  [diag] gates saved to data/refine_gates.npz")
+    return P_single, P4
 
 
 def refine_apply(ps, z):

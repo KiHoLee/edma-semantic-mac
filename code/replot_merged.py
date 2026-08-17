@@ -7,6 +7,7 @@ from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from replot_all import LBL
 
 ROOT = Path(__file__).resolve().parents[1]
 plt.rcParams.update({
@@ -25,17 +26,17 @@ snr = [float(r["snr_db"]) for r in rows]
 col = lambda k: [float(r[k]) for r in rows]
 
 fig, ax = plt.subplots()
-ax.plot(snr, col("edma"), "o-", color="C3", label="EDMA")
+ax.plot(snr, col("edma"), "o-", color="C3", label=LBL["edma"])
 ax.plot(snr, col("edma_ref"), "^-", color="C2",
-        label="EDMA + refinement stage")
-ax.plot(snr, col("todma"), "d-.", color="C4", label="ToDMA-adapted")
-ax.plot(snr, col("oma"), "v:", color="C1", label="OMA")
+        label=LBL["hybrid"])
+ax.plot(snr, col("todma"), "d-.", color="C4", label=LBL["todma"])
+ax.plot(snr, col("oma"), "v:", color="C1", label=LBL["oma"])
 ax.plot(snr, col("genie"), "-", color="gray", lw=1.0,
-        label="Genie-aided SIC bound")
+        label=LBL["genie"])
 ax.set_xlabel("Per-block SNR $\\rho$ [dB]")
 ax.set_ylabel("Mean cosine similarity")
 ax.set_xlim(snr[0], snr[-1])
-ax.set_ylim(0, 0.85)
+ax.set_ylim(0, 0.75)
 ax.legend(loc="upper left")
 fig.subplots_adjust(**AXES_RECT)
 fig.savefig(ROOT / "fig" / "fig_bertvit_merged.pdf")

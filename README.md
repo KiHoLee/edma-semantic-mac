@@ -59,7 +59,11 @@ Rayleigh MSE), `E4` writes `csi_error.csv` (imperfect-CSI
 robustness), `E5` writes `mask_family_rev.csv` (Walsh–Hadamard versus
 Haar), `E8` writes `mismatch.csv` (affinity mismatch and
 quantization), and `E9` writes `cosine_ceiling.csv` (cosine-ceiling
-corollary check).
+corollary check). The empirical affinity statistics quoted in the
+manuscript are recomputable from `clip_realdata_beta.csv` and
+`bert_vit_beta.csv` (32 paired and 32 unpaired samples per encoder
+family), and the trained refinement gates behind the capacity-check
+claim are stored in `refine_gates.npz`.
 
 ## Verifying the analysis
 

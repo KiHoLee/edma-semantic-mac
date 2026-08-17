@@ -57,6 +57,7 @@ def save(fig, name):
 
 # ------------------------------------------------------ fig_floor
 def fig_floor():
+    from matplotlib.lines import Line2D
     rows = rows_of("floor_validation")
     fig, ax = plt.subplots()
     colors = {"256": "C0", "768": "C3"}
@@ -66,12 +67,10 @@ def fig_floor():
               or float(r["d"]) == float(d)]
         snr = col(rd, "snr_db")
         ax.plot(snr, col(rd, "mse_mc"), "o", ms=3.5, color=colors[d],
-                mfc="none", label=rf"Monte Carlo, $d={d}$")
-        ax.plot(snr, col(rd, "mse_theory"), "-", color=colors[d],
-                label=rf"Theorem 1, $d={d}$")
+                mfc="none")
+        ax.plot(snr, col(rd, "mse_theory"), "-", color=colors[d])
         if d == "768":
-            ax.plot(snr, col(rd, "mse_blind"), "--", color="C1", lw=1.2,
-                    label=LBL["blind"])
+            ax.plot(snr, col(rd, "mse_blind"), "--", color="C1", lw=1.2)
     g = 1.0 - beta**2
     ax.axhline(math.sqrt(g) / 2, color="gray", lw=0.8, ls="--")
     ax.axhline(0.5, color="gray", lw=0.8, ls=":")
@@ -81,12 +80,25 @@ def fig_floor():
                 fontsize=7, color="gray")
     ax.set_xlabel("Per-block SNR $\\rho$ [dB]")
     ax.set_ylabel(r"Per-user MSE $\mathbb{E}\|\hat{\mathbf{e}}_u-\mathbf{e}_u\|_2^2$")
-    ax.set_xlim(0, 40); ax.set_ylim(0.4, 1.32)
-    ax.set_yticks([0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
-    # legend in dedicated headroom above the curves (max 1.0), no overlap
-    ax.legend(loc="upper center", ncol=2, columnspacing=0.9,
-              handlelength=1.6, borderaxespad=0.3)
-    save(fig, "fig_floor")
+    ax.set_xlim(0, 40); ax.set_ylim(0.4, 1.05)
+    # one-row legend fully OUTSIDE the axes, flush to the top-right:
+    # composite handles (marker = Monte Carlo, line = Theorem 1; the
+    # convention is stated in the caption), so three entries fit one row
+    handles = [
+        Line2D([], [], color="C0", marker="o", mfc="none", ms=3.5,
+               ls="-", label="$d=256$"),
+        Line2D([], [], color="C3", marker="o", mfc="none", ms=3.5,
+               ls="-", label="$d=768$"),
+        Line2D([], [], color="C1", ls="--", lw=1.2, label=LBL["blind"]),
+    ]
+    ax.legend(handles=handles, loc="lower right",
+              bbox_to_anchor=(1.0, 1.0), ncol=3, frameon=False,
+              columnspacing=1.0, handlelength=1.8, borderaxespad=0.0,
+              handletextpad=0.5)
+    fig.subplots_adjust(left=0.205, right=0.965, top=0.90, bottom=0.185)
+    fig.savefig(FIG / "fig_floor.pdf")
+    plt.close(fig)
+    print("[OK] wrote fig_floor.pdf")
 
 
 # ------------------------------------------------ fig_rate_corrected
@@ -124,7 +136,7 @@ def fig_beta_sweep():
     ax.plot([], [], ls="--", color="gray", label=LBL["oma"])
     ax.plot([], [], ls="-.", color="gray", label=LBL["genie"])
     for b0 in (0.030, 0.311):
-        ax.axvline(b0, color="gray", ls=":", lw=0.9)
+        ax.axvline(b0, ymax=0.62, color="gray", ls=":", lw=0.9)
     ax.set_xlabel(r"Pairwise affinity $\beta$")
     ax.set_ylabel("Effective sum rate [bps/Hz]")
     ax.set_xlim(0, 1); ax.set_ylim(0, 1.0)
@@ -168,6 +180,7 @@ def fig_multiuser():
     ax.set_xlabel("Per-block SNR $\\rho$ [dB]")
     ax.set_ylabel("Effective sum rate [bps/Hz]")
     ax.set_xlim(0, 30)
+    ax.set_ylim(bottom=0)
     ax.legend(loc="upper left")
     save(fig, "fig_multiuser_corrected")
 

@@ -6,7 +6,7 @@
 \usetikzlibrary{arrows.meta,positioning,fit,calc}
 \begin{document}
 \begin{tikzpicture}[
-  font=\footnotesize,
+  font=\small,
   node distance=3.2mm and 4.5mm,
   blk/.style={draw, semithick, minimum height=5.5mm, minimum width=9mm,
               inner sep=1.5pt, align=center},
@@ -58,8 +58,8 @@
 \draw[arr] (sig) -- node[above, lbl] {$\mb{r}$} (mf);
 \draw[arr] (mf) -- node[above, lbl] {$\mb{t}_u$} (wnr);
 \draw[arr] (wnr) -- (out);
-\fill (tap1) circle (0.5pt);
-\fill (tapU) circle (0.5pt);
+\fill (tap1) circle (1.1pt);
+\fill (tapU) circle (1.1pt);
 \draw[dsh] (tap1) -- ($(tap1 |- bm.north)$);
 \draw[dsh] (bm.east) -| (wnr.south);
 \end{tikzpicture}
