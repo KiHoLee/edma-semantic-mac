@@ -36,7 +36,7 @@ LBL = {
     "todma": "ToDMA-adapted",
     "mac":   "MAC sum capacity",
     "coop":  "Full-cooperation bound",
-    "hybrid": "EDMA + refinement stage",
+    "hybrid": "EDMA + refinement",
 }
 
 
@@ -190,20 +190,18 @@ def fig_retrieval():
     ax.plot(snr, col(rows, "todma"), "d-.", color="C4",
             label=LBL["todma"])
     ax.plot(snr, col(rows, "oma"), "v:", color="C1", label=LBL["oma"])
+    # genie curve overlaps EDMA here; named in the caption, not the legend
     ax.plot(snr, col(rows, "genie"), "-", color="gray", lw=1.0,
-            label=LBL["genie"])
-    ax.axhline(1.0 / 16, color="gray", ls=":", lw=0.8)
-    ax.annotate("chance $1/16$", xy=(10.5, 1.0 / 16 + 0.015), fontsize=7,
+            label="_nolegend_")
+    ax.axhline(1.0 / 16, xmax=0.48, color="gray", ls=":", lw=0.8)
+    ax.annotate("chance $1/16$", xy=(1.2, 1.0 / 16 + 0.015), fontsize=7,
                 color="gray")
     ax.set_xlabel("SNR $\\rho$ [dB]")
     ax.set_ylabel("Top-1 retrieval accuracy")
-    ax.set_xlim(snr[0], snr[-1]); ax.set_ylim(0, 1.42)
-    ax.set_yticks([0.0, 0.2, 0.4, 0.6, 0.8, 1.0])
-    hs, ls = ax.get_legend_handles_labels()
-    order = [1, 4, 0, 2, 3]      # long labels share column one
-    ax.legend([hs[i] for i in order], [ls[i] for i in order],
-              loc="upper center", ncol=2, columnspacing=0.7,
-              handlelength=1.3, handletextpad=0.5)
+    ax.set_xlim(snr[0], snr[-1]); ax.set_ylim(0, 1.0)
+    ax.legend(loc="lower right", borderaxespad=0.3,
+              handlelength=1.4, handletextpad=0.5,
+              labelspacing=0.35)
     save(fig, "fig_retrieval")
 
 
