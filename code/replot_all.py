@@ -81,8 +81,11 @@ def fig_floor():
                 fontsize=7, color="gray")
     ax.set_xlabel("Per-block SNR $\\rho$ [dB]")
     ax.set_ylabel(r"Per-user MSE $\mathbb{E}\|\hat{\mathbf{e}}_u-\mathbf{e}_u\|_2^2$")
-    ax.set_xlim(0, 40); ax.set_ylim(0.4, 1.05)
-    ax.legend(loc="lower left", bbox_to_anchor=(0.02, 0.18))
+    ax.set_xlim(0, 40); ax.set_ylim(0.4, 1.32)
+    ax.set_yticks([0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
+    # legend in dedicated headroom above the curves (max 1.0), no overlap
+    ax.legend(loc="upper center", ncol=2, columnspacing=0.9,
+              handlelength=1.6, borderaxespad=0.3)
     save(fig, "fig_floor")
 
 
