@@ -48,9 +48,10 @@ Run the scripts from inside `code/`. All plots are rendered from
 | Fig. 2 | Per-user MSE, aware vs blind floor | `revision_sims.py E1` | `floor_validation.csv` |
 | Fig. 3 | Effective sum rate at the CLIP affinity | `revision_sims.py E7a` | `rate_corrected.csv` |
 | Fig. 4 | Cosine recovery on real BERT+ViT pairs | `fig_real_merged.py`, then `refine_matched.py` | `bertvit_merged.csv` |
-| Fig. 5 | Receiver comparison under Rayleigh fading | `revision_sims_gpu.py E2` | `sic_comparison.csv` |
-| Fig. 6 | Value of the measured affinity | `revision_sims.py E7a` | `beta_sweep_corrected.csv` |
-| Fig. 7 | Multi-user scaling (joint Wiener) | `revision_sims_gpu.py E7c` | `multiuser_corrected.csv` |
+| Fig. 5 | Top-1 retrieval with recovered embeddings | `retrieval_real.py` | `retrieval_real.csv` |
+| Fig. 6 | Receiver comparison under Rayleigh fading | `revision_sims_gpu.py E2` | `sic_comparison.csv` |
+| Fig. 7 | Value of the measured affinity | `revision_sims.py E7a` | `beta_sweep_corrected.csv` |
+| Fig. 8 | Multi-user scaling (joint Wiener) | `revision_sims_gpu.py E7c` | `multiuser_corrected.csv` |
 
 Quantities quoted in the text but not plotted come from the same
 drivers: `revision_sims.py E0` writes `theorem_check.csv` (Theorem 1

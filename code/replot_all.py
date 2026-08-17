@@ -179,11 +179,40 @@ def fig_multiuser():
     save(fig, "fig_multiuser_corrected")
 
 
+# ------------------------------------------------ fig_retrieval
+def fig_retrieval():
+    rows = rows_of("retrieval_real")
+    snr = col(rows, "snr_db")
+    fig, ax = plt.subplots()
+    ax.plot(snr, col(rows, "edma"), "o-", color="C3", label=LBL["edma"])
+    ax.plot(snr, col(rows, "hybrid"), "^-", color="C2",
+            label=LBL["hybrid"])
+    ax.plot(snr, col(rows, "todma"), "d-.", color="C4",
+            label=LBL["todma"])
+    ax.plot(snr, col(rows, "oma"), "v:", color="C1", label=LBL["oma"])
+    ax.plot(snr, col(rows, "genie"), "-", color="gray", lw=1.0,
+            label=LBL["genie"])
+    ax.axhline(1.0 / 16, color="gray", ls=":", lw=0.8)
+    ax.annotate("chance $1/16$", xy=(10.5, 1.0 / 16 + 0.015), fontsize=7,
+                color="gray")
+    ax.set_xlabel("SNR $\\rho$ [dB]")
+    ax.set_ylabel("Top-1 retrieval accuracy")
+    ax.set_xlim(snr[0], snr[-1]); ax.set_ylim(0, 1.42)
+    ax.set_yticks([0.0, 0.2, 0.4, 0.6, 0.8, 1.0])
+    hs, ls = ax.get_legend_handles_labels()
+    order = [1, 4, 0, 2, 3]      # long labels share column one
+    ax.legend([hs[i] for i in order], [ls[i] for i in order],
+              loc="upper center", ncol=2, columnspacing=0.7,
+              handlelength=1.3, handletextpad=0.5)
+    save(fig, "fig_retrieval")
+
+
 if __name__ == "__main__":
     import sys
     todo = set(sys.argv[1:])
     ALL = {"floor": fig_floor, "rate": fig_rate, "beta": fig_beta_sweep,
-           "sic": fig_sic, "multi": fig_multiuser}
+           "sic": fig_sic, "multi": fig_multiuser,
+           "retr": fig_retrieval}
     for name, fn in ALL.items():
         if not todo or name in todo:
             fn()
