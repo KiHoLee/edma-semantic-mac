@@ -33,7 +33,7 @@ ax.plot(snr, col("todma"), "d-.", color="C4", label=LBL["todma"])
 ax.plot(snr, col("oma"), "v:", color="C1", label=LBL["oma"])
 ax.plot(snr, col("genie"), "-", color="gray", lw=1.0,
         label=LBL["genie"])
-ax.set_xlabel("Per-block SNR $\\rho$ [dB]")
+ax.set_xlabel("SNR $\\rho$ [dB]")
 ax.set_ylabel("Mean cosine similarity")
 ax.set_xlim(snr[0], snr[-1])
 ax.set_ylim(0, 0.75)

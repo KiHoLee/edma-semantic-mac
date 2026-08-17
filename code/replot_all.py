@@ -78,7 +78,7 @@ def fig_floor():
                 color="gray")
     ax.annotate(r"aware floor $\sqrt{1-\beta^2}/2$", xy=(14.0, 0.432),
                 fontsize=7, color="gray")
-    ax.set_xlabel("Per-block SNR $\\rho$ [dB]")
+    ax.set_xlabel("SNR $\\rho$ [dB]")
     ax.set_ylabel(r"Per-user MSE $\mathbb{E}\|\hat{\mathbf{e}}_u-\mathbf{e}_u\|_2^2$")
     ax.set_xlim(0, 40); ax.set_ylim(0.4, 1.05)
     # framed in-axes legend like every other result figure; composite
@@ -106,7 +106,7 @@ def fig_rate():
     ax.plot(snr, col(rows, "oma"), "--", color="C1", label=LBL["oma"])
     ax.plot(snr, col(rows, "genie"), "-.", color="C0", label=LBL["genie"])
     ax.plot(snr, col(rows, "mac"), "-", color="k", lw=1.0, label=LBL["mac"])
-    ax.set_xlabel("Per-block SNR $\\rho$ [dB]")
+    ax.set_xlabel("SNR $\\rho$ [dB]")
     ax.set_ylabel("Effective sum rate [bps/Hz]")
     ax.set_xlim(0, 40); ax.set_ylim(0, 3.2)
     ax.legend(loc="upper left")
@@ -149,7 +149,7 @@ def fig_sic():
     ax.plot(snr, col(rows, "oma"), "v--", color="C1", label=LBL["oma"])
     ax.plot(snr, col(rows, "genie"), "-", color="gray", lw=1.0,
             label=LBL["genie"])
-    ax.set_xlabel("Per-block SNR $\\rho$ [dB]")
+    ax.set_xlabel("SNR $\\rho$ [dB]")
     ax.set_ylabel("Mean cosine similarity")
     ax.set_xlim(snr[0], snr[-1]); ax.set_ylim(0, 0.7)
     ax.legend(loc="upper left")
@@ -171,7 +171,7 @@ def fig_multiuser():
         mk = [i for i, s in enumerate(snr) if s % 5 == 0]
         ax.plot([snr[i] for i in mk], [col(rd, "edma_mc")[i] for i in mk],
                 "o", color=colors[U], ms=4, mfc="none")
-    ax.set_xlabel("Per-block SNR $\\rho$ [dB]")
+    ax.set_xlabel("SNR $\\rho$ [dB]")
     ax.set_ylabel("Effective sum rate [bps/Hz]")
     ax.set_xlim(0, 30)
     ax.set_ylim(bottom=0)
