@@ -405,11 +405,76 @@ def E9_ceiling(d=512, snr=60.0, ntr=200):
                                  'blind_mc', 'blind_pred'], rows)
 
 
+# ------------------------------------------------------------------
+def E10_whpad(beta=0.311, d=768, dpad=1024, ntr=200):
+    """Zero-padded WH at d=768 (padded to 1024) vs dense Haar at 768.
+
+    The embedding (768) is zero-padded to 1024, masked by H_1024 D_u,
+    and the exact per-coordinate Wiener uses the true prior (signal
+    variance 1/768 on the active support, zero on the padding, so the
+    padded coordinates are discarded). Reference: Haar masks at the
+    native d=768 with the standard aware demultiplexer. Same per-block
+    energy E_b = 1 and the same noise PSD; the padded block occupies
+    dpad channel uses, a bandwidth cost of dpad/d."""
+    print(chr(10) + '=== E10: zero-padded WH (768->1024) vs native Haar 768 ===')
+    snr_db = np.arange(0, 41, 5)
+    sigs = torch.tensor(10 ** (-snr_db / 20.0), dtype=torch.float32,
+                        device=DEV)
+    nb = len(snr_db)
+    H = np.array([[1.0]])
+    while H.shape[0] < dpad:
+        H = np.block([[H, H], [H, -H]])
+    Ht = torch.tensor(H / math.sqrt(dpad), dtype=torch.float32, device=DEV)
+    g = 1.0 - beta**2
+    res = {'haar': np.zeros(nb), 'whpad': np.zeros(nb)}
+    for _ in range(ntr):
+        e1, e2 = embed_pair(d, beta)
+        # ---- native Haar at 768 ----
+        M1, M2 = haar_g(d), haar_g(d)
+        Q = M1.T @ M2
+        n = cnoise_g(d)
+        r = (M1 @ e1 + M2 @ e2).to(torch.complex64).unsqueeze(0) \
+            + sigs.view(-1, 1) * n.unsqueeze(0)
+        t1 = (M1.T.to(torch.complex64) @ r.unsqueeze(-1)).squeeze(-1)
+        g1 = aware_g(t1, Q, beta, 1.0, sigs**2)
+        res['haar'] += abscos(g1, e1)
+        # ---- zero-padded WH at 1024 ----
+        z = torch.zeros(dpad - d, device=DEV)
+        e1p = torch.cat([e1, z]); e2p = torch.cat([e2, z])
+        D1 = torch.tensor(np.sign(rng.standard_normal(dpad)),
+                          dtype=torch.float32, device=DEV)
+        D2 = torch.tensor(np.sign(rng.standard_normal(dpad)),
+                          dtype=torch.float32, device=DEV)
+        W1, W2 = Ht * D1.unsqueeze(0), Ht * D2.unsqueeze(0)
+        npad = cnoise_g(dpad)
+        rp = (W1 @ e1p + W2 @ e2p).to(torch.complex64).unsqueeze(0) \
+            + sigs.view(-1, 1) * npad.unsqueeze(0)
+        tw = (W1.T.to(torch.complex64) @ rp.unsqueeze(-1)).squeeze(-1)
+        q = (D1 * D2)[:d]                       # active coordinates only
+        a = 1.0 + beta * q                      # (d,)
+        s_var = 1.0 / d                         # true signal variance
+        v = g / d + (sigs**2).view(-1, 1)       # interference + noise
+        gains = (s_var * a.unsqueeze(0)) / (a.unsqueeze(0)**2 * s_var + v)
+        w1 = gains.to(torch.complex64) * tw[:, :d]
+        res['whpad'] += abscos(w1, e1)
+    for k in res:
+        res[k] /= ntr
+    rows = [[s, res['haar'][i], res['whpad'][i]]
+            for i, s in enumerate(snr_db)]
+    write_csv('wh_padding', ['snr_db', 'haar768', 'whpad1024'], rows)
+    dev = res['haar'] - res['whpad']
+    print(f'  cosine delta (haar - whpad): max {dev.max():.4f}, '
+          f'at 20 dB {dev[list(snr_db).index(20)]:.4f}, '
+          f'at 40 dB {dev[-1]:.4f}')
+    print(f'  bandwidth cost: {dpad}/{d} = {dpad/d:.3f}x uses '
+          f'(per-use rate factor {d/dpad:.3f})')
+
+
 if __name__ == "__main__":
     todo = set(sys.argv[1:])
     ALL = {"E2": E2_sic, "E3": E3_unconditional, "E4": E4_csi,
            "E5": E5_maskfam, "E7c": E7_multiuser, "E8": E8_mismatch,
-           "E9": E9_ceiling}
+           "E9": E9_ceiling, "E10": E10_whpad}
     for name, fn in ALL.items():
         if not todo or name in todo:
             fn()
