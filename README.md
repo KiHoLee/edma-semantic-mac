@@ -8,7 +8,8 @@ Reproducibility package for
 
 This repository contains the simulation code, the raw result data, and
 the figure files behind every numerical claim in the paper. It is
-private during peer review and will be made public upon publication.
+publicly available during peer review so that the editors and
+reviewers can inspect and rerun every experiment.
 
 The design under test: each user applies an independent Haar
 orthogonal mask, and the receiver runs a matched filter followed by
@@ -89,5 +90,6 @@ drawn fresh on every realization.
 
 ## Citation and license
 
-Citation details and a license will be added when the paper is
-published.
+Until the paper is published, cite the submitted manuscript listed
+at the top of this file. A formal citation entry and a license
+will be added upon publication.
