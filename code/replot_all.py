@@ -86,9 +86,9 @@ def fig_floor():
     # is stated in the caption) keep it to three entries
     handles = [
         Line2D([], [], color="C0", marker="o", mfc="none", ms=3.5,
-               ls="-", label="$d=256$"),
+               ls="-", label=rf"{LBL['edma']}, $d=256$"),
         Line2D([], [], color="C3", marker="o", mfc="none", ms=3.5,
-               ls="-", label="$d=768$"),
+               ls="-", label=rf"{LBL['edma']}, $d=768$"),
         Line2D([], [], color="C1", ls="--", lw=1.2, label=LBL["blind"]),
     ]
     ax.legend(handles=handles, loc="upper right")
