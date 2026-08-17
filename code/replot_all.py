@@ -130,10 +130,10 @@ def fig_beta_sweep():
     ax.plot([], [], ls="--", color="gray", label=LBL["oma"])
     ax.plot([], [], ls="-.", color="gray", label=LBL["genie"])
     for b0 in (0.030, 0.311):
-        ax.axvline(b0, ymax=0.62, color="gray", ls=":", lw=0.9)
+        ax.axvline(b0, ymax=0.54, color="gray", ls=":", lw=0.9)
     ax.set_xlabel(r"Pairwise affinity $\beta$")
     ax.set_ylabel("Effective sum rate [bps/Hz]")
-    ax.set_xlim(0, 1); ax.set_ylim(0, 1.0)
+    ax.set_xlim(0, 1); ax.set_ylim(0, 1.05)
     ax.legend(loc="upper left")
     save(fig, "fig_beta_sweep_corrected")
 
