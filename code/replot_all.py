@@ -81,9 +81,9 @@ def fig_floor():
     ax.set_xlabel("Per-block SNR $\\rho$ [dB]")
     ax.set_ylabel(r"Per-user MSE $\mathbb{E}\|\hat{\mathbf{e}}_u-\mathbf{e}_u\|_2^2$")
     ax.set_xlim(0, 40); ax.set_ylim(0.4, 1.05)
-    # one-row legend fully OUTSIDE the axes, flush to the top-right:
-    # composite handles (marker = Monte Carlo, line = Theorem 1; the
-    # convention is stated in the caption), so three entries fit one row
+    # framed in-axes legend like every other result figure; composite
+    # handles (marker = Monte Carlo, line = Theorem 1; the convention
+    # is stated in the caption) keep it to three entries
     handles = [
         Line2D([], [], color="C0", marker="o", mfc="none", ms=3.5,
                ls="-", label="$d=256$"),
@@ -91,14 +91,8 @@ def fig_floor():
                ls="-", label="$d=768$"),
         Line2D([], [], color="C1", ls="--", lw=1.2, label=LBL["blind"]),
     ]
-    ax.legend(handles=handles, loc="lower right",
-              bbox_to_anchor=(1.0, 1.0), ncol=3, frameon=False,
-              columnspacing=1.0, handlelength=1.8, borderaxespad=0.0,
-              handletextpad=0.5)
-    fig.subplots_adjust(left=0.205, right=0.965, top=0.90, bottom=0.185)
-    fig.savefig(FIG / "fig_floor.pdf")
-    plt.close(fig)
-    print("[OK] wrote fig_floor.pdf")
+    ax.legend(handles=handles, loc="upper right")
+    save(fig, "fig_floor")
 
 
 # ------------------------------------------------ fig_rate_corrected
